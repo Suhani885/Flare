@@ -1,6 +1,7 @@
+import { Suspense } from "react";
 import { LoginForm } from "@/components/forms/login-form";
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "@/components/shared/logo";
 
 export default function LoginPage() {
   return (
@@ -13,7 +14,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
-            <Image src="/logo.png" alt="FlareHer" width={120} height={40} className="object-contain" />
+            <Logo />
           </div>
           <h1 className="font-serif text-3xl text-textPrimary sm:text-4xl">
             Welcome <span className="italic text-primary-500">Back</span>
@@ -24,10 +25,12 @@ export default function LoginPage() {
         </div>
 
         <div className="overflow-hidden rounded-3xl border border-white/20 bg-surface/60 p-6 shadow-2xl backdrop-blur-xl sm:p-8">
-          <LoginForm />
+          <Suspense fallback={null}>
+            <LoginForm />
+          </Suspense>
 
           <div className="mt-8 text-center text-sm">
-            <span className="text-textMuted">New to FlareHer? </span>
+            <span className="text-textMuted">New to Flare? </span>
             <Link
               href="/register"
               className="font-semibold text-primary-600 transition-colors hover:text-primary-500"

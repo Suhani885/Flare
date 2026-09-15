@@ -1,6 +1,6 @@
 import { RegisterForm } from "@/components/forms/register-form";
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "@/components/shared/logo";
 
 export default function RegisterPage() {
   return (
@@ -13,7 +13,7 @@ export default function RegisterPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
-            <Image src="/logo.png" alt="FlareHer" width={120} height={40} className="object-contain" />
+            <Logo />
           </div>
           <h1 className="font-serif text-3xl text-textPrimary sm:text-4xl">
             Start Your <span className="italic text-primary-500">Journey</span>

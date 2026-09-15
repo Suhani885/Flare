@@ -9,9 +9,6 @@ const decCount = useGlobalLoader.getState().decreaseCounter;
 const apiClient = axios.create({
   baseURL,
   withCredentials: true,
-  headers: {
-    "ngrok-skip-browser-warning": "69420",
-  },
 });
 
 apiClient.interceptors.request.use(

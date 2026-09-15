@@ -1,10 +1,9 @@
-export const baseURL = "https://flareher.api.com";
+// Internal Next.js API routes — auth (login/logout) is handled separately by
+// NextAuth's own signIn()/signOut() helpers, not through this client.
+export const baseURL = "/api";
 
 export const endpoints = {
-  SKIN_ANALYSIS: "/analysis/skin/",
-  HAIR_ANALYSIS: "/analysis/hair/",
-  PRODUCTS: "/products/",
-  LOGIN: "/users/login/",
-  REGISTER: "/users/register/",
-  LOGOUT: "/users/logout/",
+  REGISTER: "/register",
+  SKIN_ANALYSIS: "/analysis/skin",
+  HAIR_ANALYSIS: "/analysis/hair",
 };

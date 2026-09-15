@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Logo } from "@/components/shared/logo";
+import { useSession, signOut } from "next-auth/react";
 import {
   ChevronDown,
   ShoppingBag,
@@ -12,6 +13,7 @@ import {
   Menu,
   X,
   Heart,
+  LogOut,
 } from "lucide-react";
 
 export function Navbar() {
@@ -21,6 +23,8 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,7 +71,7 @@ export function Navbar() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="group flex items-center">
-              <Image src="/logo.png" alt="FlareHer" width={110} height={36} className="object-contain" />
+              <Logo />
             </Link>
 
             {/* Desktop Navigation */}
@@ -116,13 +120,32 @@ export function Navbar() {
                 </div>
               </Link>
 
-              <Link
-                href="/login"
-                className="ml-2 hidden items-center gap-2 rounded-full bg-textPrimary px-6 py-2.5 text-sm font-medium text-white transition-all hover:scale-[1.02] hover:bg-black hover:shadow-xl sm:flex"
-              >
-                <User className="h-4 w-4" />
-                <span>Account</span>
-              </Link>
+              {status === "authenticated" ? (
+                <div className="ml-2 hidden items-center gap-2 sm:flex">
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center gap-2 rounded-full bg-textPrimary px-6 py-2.5 text-sm font-medium text-white transition-all hover:scale-[1.02] hover:bg-black hover:shadow-xl"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>{session.user?.name?.split(" ")[0] ?? "Account"}</span>
+                  </Link>
+                  <button
+                    onClick={() => signOut({ redirect: false }).then(() => router.push("/"))}
+                    aria-label="Sign out"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-surface/50 text-textSecondary transition-all hover:bg-white hover:text-primary-600 hover:shadow-sm"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="ml-2 hidden items-center gap-2 rounded-full bg-textPrimary px-6 py-2.5 text-sm font-medium text-white transition-all hover:scale-[1.02] hover:bg-black hover:shadow-xl sm:flex"
+                >
+                  <User className="h-4 w-4" />
+                  <span>Account</span>
+                </Link>
+              )}
 
               <button
                 className="ml-2 flex h-10 w-10 items-center justify-center rounded-full bg-surface/50 text-textSecondary transition-all hover:bg-white md:hidden"
@@ -177,13 +200,34 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/login"
-                className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-textPrimary py-4 px-6 text-lg tracking-wide text-white"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login to Account
-              </Link>
+              {status === "authenticated" ? (
+                <div className="mt-6 flex flex-col gap-3">
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center justify-center gap-2 rounded-xl bg-textPrimary py-4 px-6 text-lg tracking-wide text-white"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      signOut({ redirect: false }).then(() => router.push("/"));
+                    }}
+                    className="flex items-center justify-center gap-2 rounded-xl border border-border py-4 px-6 text-lg tracking-wide text-textPrimary"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-textPrimary py-4 px-6 text-lg tracking-wide text-white"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Login to Account
+                </Link>
+              )}
             </div>
           </div>
         </div>

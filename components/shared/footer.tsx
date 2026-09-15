@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Instagram, Facebook, Linkedin, Youtube } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { Logo } from "@/components/shared/logo";
 
 export function Footer() {
   const pathname = usePathname();
@@ -13,10 +13,10 @@ export function Footer() {
   }
 
   const socials = [
-    { name: "Instagram", icon: <Instagram className="h-5 w-5" />, url: "https://instagram.com/flareher" },
-    { name: "Facebook", icon: <Facebook className="h-5 w-5" />, url: "https://facebook.com/flareher" },
-    { name: "LinkedIn", icon: <Linkedin className="h-5 w-5" />, url: "https://linkedin.com/company/flareher" },
-    { name: "YouTube", icon: <Youtube className="h-5 w-5" />, url: "https://youtube.com/flareher" },
+    { name: "Instagram", icon: <Instagram className="h-5 w-5" />, url: "https://instagram.com/flareapp" },
+    { name: "Facebook", icon: <Facebook className="h-5 w-5" />, url: "https://facebook.com/flareapp" },
+    { name: "LinkedIn", icon: <Linkedin className="h-5 w-5" />, url: "https://linkedin.com/company/flareapp" },
+    { name: "YouTube", icon: <Youtube className="h-5 w-5" />, url: "https://youtube.com/flareapp" },
   ];
 
   const footerLinks = {
@@ -31,10 +31,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="lg:col-span-1">
             <Link href="/" className="mb-6 flex items-center">
-              <Image src="/logo.png" alt="FlareHer" width={110} height={36} className="object-contain" />
+              <Logo />
             </Link>
             <p className="text-sm text-textSecondary mb-8 leading-relaxed pr-4">
-              Premium beauty products for everyone. AI-personalized, ethically sourced, cruelty-free, and made with intention.
+              Your glow, your way. AI-personalized skincare &amp; haircare for
+              everyone — ethically sourced, cruelty-free, and made with intention.
             </p>
 
             <div>
@@ -81,7 +82,7 @@ export function Footer() {
 
         <div className="mt-16 pt-8 border-t border-border/60 flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm text-textMuted">
-            © {new Date().getFullYear()} FlareHer Beauty. All rights reserved.
+            © {new Date().getFullYear()} Flare. All rights reserved.
           </p>
           <div className="flex gap-4">
              <span className="text-xs text-textMuted">Beauty for every identity</span>

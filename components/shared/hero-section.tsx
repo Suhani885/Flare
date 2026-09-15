@@ -18,6 +18,9 @@ export function HeroSection() {
       <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-24">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           <div className="z-10 flex w-full flex-col justify-center lg:w-[55%]">
+            <span className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-primary-600">
+              Your Glow. Your Way.
+            </span>
             <h1
               id="hero-title"
               className="mb-8 font-serif text-5xl font-light leading-[1.05] tracking-tight text-textPrimary md:text-6xl lg:text-[5.5rem]"
