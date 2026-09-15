@@ -1,12 +1,19 @@
 "use client";
 
-import { Button, Form, Input, Checkbox } from "antd";
+import { Button, Form, Input } from "antd";
 import { Mail, Lock, User } from "lucide-react";
 
-export function RegisterForm() {
-  const [form] = Form.useForm();
+interface RegisterFormValues {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
-  const onFinish = async (values: any) => {
+export function RegisterForm() {
+  const [form] = Form.useForm<RegisterFormValues>();
+
+  const onFinish = async (values: RegisterFormValues) => {
     console.log("Register:", values);
   };
 

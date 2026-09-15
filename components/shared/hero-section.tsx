@@ -1,120 +1,96 @@
+"use client";
+
 import Link from "next/link";
-import { Button } from "antd";
-import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowRight, Play } from "lucide-react";
+
+const audienceChips: { label: string; audience: string }[] = [
+  { label: "For Her", audience: "WOMEN" },
+  { label: "For Him", audience: "MEN" },
+  { label: "For Everyone", audience: "UNISEX" },
+];
 
 export function HeroSection() {
   return (
-    <section className="bg-natural overflow-hidden">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:py-24">
+    <section
+      className="relative flex min-h-screen items-center pb-20 pt-32 overflow-hidden bg-[#FAFAFA]"
+      aria-labelledby="hero-title"
+    >
+      <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-24">
+        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+          <div className="z-10 flex w-full flex-col justify-center lg:w-[55%]">
+            <h1
+              id="hero-title"
+              className="mb-8 font-serif text-5xl font-light leading-[1.05] tracking-tight text-textPrimary md:text-6xl lg:text-[5.5rem]"
+            >
+              <span className="block">Bespoke Beauty,</span>
+              <span className="relative mt-2 block italic text-primary-700">
+                Crafted by AI.
+              </span>
+            </h1>
 
-        <div className="relative order-2 lg:order-1">
-          <div className="absolute -left-8 -top-8 -z-10 h-72 w-72 rounded-full bg-[var(--secondary-100)] opacity-40 blur-3xl" />
-          <div className="absolute -bottom-8 -right-8 -z-10 h-64 w-64 rounded-full bg-[var(--accent-100)] opacity-40 blur-3xl" />
-          
-          <div className="relative overflow-hidden rounded-3xl shadow-2xl">
-            <div
-              className="h-[500px] w-full"
-              style={{
-                backgroundImage: "url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800&q=80')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
-            <div className="absolute left-6 top-6">
-              <div className="h-16 w-16 rounded-2xl border-2 border-white/80 backdrop-blur-sm" />
+            <p className="mb-10 max-w-xl text-lg font-light leading-relaxed text-textSecondary md:text-xl">
+              Decode your skin &amp; hair&apos;s true needs. Our AI analysis
+              creates hyper-personalized routines for every identity, tailored
+              to your exact profile &mdash; not just one kind of beauty.
+            </p>
+
+            <div className="mb-10 flex flex-wrap items-center gap-3">
+              {audienceChips.map((chip) => (
+                <Link
+                  key={chip.audience}
+                  href={`/marketplace?audience=${chip.audience}`}
+                  className="rounded-full border border-textPrimary/15 bg-white px-5 py-2 text-sm font-medium text-textPrimary transition-all hover:border-primary-600 hover:text-primary-600 hover:shadow-sm"
+                >
+                  {chip.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-5 sm:flex-row items-center">
+              <Link
+                href="/analysis"
+                className="group relative flex h-16 items-center justify-center overflow-hidden rounded-full bg-textPrimary px-10 font-medium text-white transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] transition-transform duration-700 group-hover:translate-x-[100%]" />
+                <span className="relative z-10 text-base">Begin Analysis</span>
+                <ArrowRight className="relative z-10 ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+
+              <Link
+                href="/how-it-works"
+                className="group flex h-16 items-center justify-center gap-3 rounded-full px-8 font-medium text-textPrimary transition-all hover:bg-black/5 w-full sm:w-auto"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-textPrimary text-textPrimary transition-transform group-hover:scale-110">
+                  <Play className="h-4 w-4 ml-1" />
+                </div>
+                <span>How it works</span>
+              </Link>
             </div>
           </div>
-        </div>
 
-        <div className="order-1 lg:order-2">
-          <div
-            className="mb-3 inline-block rounded-full px-4 py-1 text-xs font-medium uppercase tracking-wider"
-            style={{
-              backgroundColor: "var(--secondary-100)",
-              color: "var(--secondary-700)",
-            }}
-          >
-            Natural Beauty Solutions
-          </div>
+          <div className="relative w-full lg:w-[45%]">
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2.5rem] bg-black/5 shadow-2xl ring-1 ring-black/5">
+              <img
+                src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&auto=format&fit=crop"
+                alt="AI skin and hair analysis"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
+              />
 
-          <h1 className="text-balance font-serif text-5xl font-light leading-tight text-[var(--color-text-primary)] lg:text-6xl">
-            <span className="font-normal italic" style={{ color: "var(--primary-600)" }}>
-              Redefining
-            </span>{" "}
-            Beauty Through
-            <br />
-            Natural{" "}
-            <span className="font-normal italic" style={{ color: "var(--secondary-600)" }}>
-              Grace & Radiance
-            </span>
-          </h1>
-
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-[var(--color-text-secondary)]">
-            At Glow Skin, we believe that true beauty comes from the harmony between pure
-            ingredients and refined sophistication. Each of our formulas is crafted with care
-            and precision, designed to deliver real results for healthy, hydrated, and naturally
-            radiant skin.
-          </p>
-
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link href="/marketplace">
-              <Button
-                type="primary"
-                size="large"
-                icon={<ArrowRight className="h-4 w-4" />}
-                iconPosition="end"
-                style={{
-                  borderRadius: "8px",
-                  paddingInline: "2rem",
-                  height: "48px",
-                }}
-              >
-                Shop Now
-              </Button>
-            </Link>
-            <Link href="/analysis">
-              <Button
-                size="large"
-                style={{
-                  borderRadius: "8px",
-                  paddingInline: "2rem",
-                  height: "48px",
-                  borderColor: "var(--secondary-400)",
-                  color: "var(--secondary-700)",
-                }}
-              >
-                View All
-              </Button>
-            </Link>
-          </div>
-
-          <div className="mt-12 flex items-center gap-4">
-            <div className="flex items-center">
-              <div
-                className="flex h-8 w-8 items-center justify-center rounded-full border"
-                style={{
-                  borderColor: "var(--secondary-300)",
-                  backgroundColor: "var(--secondary-50)",
-                }}
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="var(--secondary-600)"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+              <div className="absolute bottom-8 left-8 right-8 rounded-2xl border border-white/20 bg-white/20 p-6 backdrop-blur-xl shadow-2xl">
+                <div className="flex items-center gap-4">
+                  <div className="flex flex-col gap-1 w-full">
+                    <div className="flex justify-between items-center text-white">
+                      <span className="font-medium">Beauty Score</span>
+                      <span className="font-serif italic font-light text-xl">
+                        96%
+                      </span>
+                    </div>
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/30">
+                      <div className="h-full w-[96%] rounded-full bg-white" />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span className="ml-3 text-sm text-[var(--color-text-secondary)]">
-                Purely Honest Formula
-              </span>
             </div>
           </div>
         </div>

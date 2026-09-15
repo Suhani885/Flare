@@ -34,7 +34,7 @@ export function Footer() {
               <Image src="/logo.png" alt="FlareHer" width={110} height={36} className="object-contain" />
             </Link>
             <p className="text-sm text-textSecondary mb-8 leading-relaxed pr-4">
-              Premium beauty products designed by women, for women. Ethically sourced, cruelty-free, and made with love.
+              Premium beauty products for everyone. AI-personalized, ethically sourced, cruelty-free, and made with intention.
             </p>
 
             <div>
@@ -84,7 +84,7 @@ export function Footer() {
             © {new Date().getFullYear()} FlareHer Beauty. All rights reserved.
           </p>
           <div className="flex gap-4">
-             <span className="text-xs text-textMuted">Built for diverse beauty</span>
+             <span className="text-xs text-textMuted">Beauty for every identity</span>
           </div>
         </div>
       </div>
