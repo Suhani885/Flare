@@ -19,8 +19,8 @@ interface RegisterFormValues {
 type AudienceOption = "WOMEN" | "MEN" | undefined;
 
 const audienceOptions: { value: AudienceOption; label: string }[] = [
-  { value: "WOMEN", label: "Women" },
-  { value: "MEN", label: "Men" },
+  { value: "WOMEN", label: "Female" },
+  { value: "MEN", label: "Male" },
   { value: undefined, label: "Prefer not to say" },
 ];
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { isAuthPage } from "@/lib/auth-routes";
 import { useSession, signOut } from "next-auth/react";
 import {
   ChevronDown,
@@ -41,7 +42,7 @@ export function Navbar() {
     }
   }, [isSearchOpen]);
 
-  if (pathname?.startsWith("/login") || pathname?.startsWith("/register")) {
+  if (isAuthPage(pathname)) {
     return null;
   }
 

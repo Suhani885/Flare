@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import {
   Check,
   FlaskConical,
@@ -21,6 +22,8 @@ interface ResultsStageProps {
 
 export function ResultsStage({ result, type, onReset }: ResultsStageProps) {
   const { primaryType, secondaryType, concerns, recommendations } = result;
+  const { data: session } = useSession();
+  const isPremium = session?.user?.subscriptionTier === "PREMIUM";
 
   return (
     <div className="relative min-h-screen bg-[#FAFAFA] overflow-hidden px-4 py-20 pt-28">
@@ -172,24 +175,26 @@ export function ResultsStage({ result, type, onReset }: ResultsStageProps) {
           </div>
         )}
 
-        <div className="mb-8 rounded-2xl border-2 border-primary-200 bg-gradient-to-br from-primary-50 to-white p-6 shadow-sm">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary-600 text-white shadow-lg">
-              <Sparkles className="h-6 w-6" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-serif text-lg font-medium text-primary-700 mb-2">
-                Unlock Premium Analysis
-              </h3>
-              <p className="text-sm text-textSecondary mb-4 leading-relaxed">
-                Get a full 30-day personalised routine calendar, deeper ingredient analysis, dermatologist notes, and early access to new product launches matched to your profile.
-              </p>
-              <button className="rounded-full bg-primary-600 px-7 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] shadow-md shadow-primary-500/30">
-                Upgrade to Premium
-              </button>
+        {!isPremium && (
+          <div className="mb-8 rounded-2xl border-2 border-primary-200 bg-gradient-to-br from-primary-50 to-white p-6 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary-600 text-white shadow-lg">
+                <Sparkles className="h-6 w-6" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-serif text-lg font-medium text-primary-700 mb-2">
+                  Unlock Premium Analysis
+                </h3>
+                <p className="text-sm text-textSecondary mb-4 leading-relaxed">
+                  Get a full 30-day personalised routine calendar, deeper ingredient analysis, dermatologist notes, and early access to new product launches matched to your profile.
+                </p>
+                <button className="rounded-full bg-primary-600 px-7 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] shadow-md shadow-primary-500/30">
+                  Upgrade to Premium
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <button

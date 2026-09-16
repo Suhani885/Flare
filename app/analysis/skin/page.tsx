@@ -7,6 +7,7 @@ import { ResultsStage } from "@/components/analysis/results-stage";
 import { skinSteps, initialSkinData } from "@/data/skin-questions";
 import { apiCall } from "@/lib/api";
 import { endpoints } from "@/constants/urls";
+import { mapAnalysisResult } from "@/lib/analysis-mapper";
 import type { QuizFormData, AnalysisResult, AnalysisStage } from "@/types/analysis";
 
 function getSkinLabel(steps: typeof skinSteps, data: QuizFormData, field: string) {
@@ -35,34 +36,6 @@ function formatSkinPayload(data: QuizFormData) {
   };
 }
 
-const SKIN_FALLBACK: AnalysisResult = {
-  primaryType: "Combination Skin",
-  secondaryType: "Dehydration-Prone",
-  concerns: ["Dullness", "Hydration", "Uneven Texture"],
-  recommendations: {
-    routine: [
-      "Gentle foaming cleanser AM/PM",
-      "Hydrating toner with hyaluronic acid",
-      "Lightweight moisturizer",
-      "SPF 30+ every morning",
-      "Exfoliate 2x weekly with BHA",
-    ],
-    ingredients: ["Hyaluronic Acid", "Niacinamide", "Ceramides", "Centella Asiatica", "Vitamin C"],
-    avoidIngredients: ["Alcohol Denat", "Fragrance", "Sulfates", "Parabens"],
-    lifestyleConsiderations: [
-      "Drink 2L water daily",
-      "Change pillowcase weekly",
-      "Don't touch your face",
-      "Manage stress with meditation",
-    ],
-    products: [
-      { name: "Cetaphil Gentle Cleanser", category: "Cleanser", why: "pH-balanced, non-stripping" },
-      { name: "The Ordinary Hyaluronic Acid 2%", category: "Serum", why: "Deep hydration boost" },
-      { name: "Paula's Choice BHA Exfoliant", category: "Exfoliant", why: "Unclogs pores gently" },
-    ],
-  },
-};
-
 export default function SkinAnalysisPage() {
   const router = useRouter();
   const [stage, setStage] = useState<AnalysisStage>("quiz");
@@ -70,6 +43,7 @@ export default function SkinAnalysisPage() {
   const [formData, setFormData] = useState<QuizFormData>(initialSkinData);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSelect = (field: string, value: string) =>
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -111,6 +85,9 @@ export default function SkinAnalysisPage() {
   };
 
   const handleSubmit = async () => {
+    setSubmitting(true);
+    setError(null);
+
     const payload = formatSkinPayload(formData);
     const response = await apiCall<{
       primary_type: string;
@@ -125,23 +102,19 @@ export default function SkinAnalysisPage() {
       };
     }>("POST", endpoints.SKIN_ANALYSIS, { data: payload });
 
-    if (response.success && response.data) {
-      const d = response.data;
-      setResult({
-        primaryType: d.primary_type,
-        secondaryType: d.secondary_characteristics?.join(", ") ?? "",
-        concerns: d.main_concerns ? d.main_concerns.split(", ") : [],
-        recommendations: {
-          routine: d.recommendations?.routine ?? [],
-          ingredients: d.recommendations?.ingredients ?? [],
-          avoidIngredients: d.recommendations?.avoid_ingredients ?? [],
-          lifestyleConsiderations: d.recommendations?.lifestyle ?? [],
-          products: d.recommendations?.products ?? [],
-        },
-      });
-    } else {
-      setResult(SKIN_FALLBACK);
+    setSubmitting(false);
+
+    if (response.status === 401) {
+      router.push("/login?callbackUrl=/analysis/skin");
+      return;
     }
+
+    if (!response.success || !response.data) {
+      setError(response.message ?? "Something went wrong. Please try again.");
+      return;
+    }
+
+    setResult(mapAnalysisResult(response.data));
     setStage("results");
   };
 
@@ -164,6 +137,7 @@ export default function SkinAnalysisPage() {
       formData={formData}
       error={error}
       type="skin"
+      submitting={submitting}
       onSelect={handleSelect}
       onMultiSelect={handleMultiSelect}
       onNext={handleNext}

@@ -70,7 +70,6 @@ export function ThemeToggle({
 
     router.refresh();
     setSaving(false);
-    toast.success("Theme updated");
   };
 
   if (variant === "inline") {

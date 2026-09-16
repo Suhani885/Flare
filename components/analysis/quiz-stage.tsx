@@ -9,6 +9,7 @@ interface QuizStageProps {
   formData: QuizFormData;
   error: string | null;
   type: AnalysisType;
+  submitting?: boolean;
   onSelect: (field: string, value: string) => void;
   onMultiSelect: (field: string, value: string) => void;
   onNext: () => void;
@@ -22,6 +23,7 @@ export function QuizStage({
   formData,
   error,
   type,
+  submitting = false,
   onSelect,
   onMultiSelect,
   onNext,
@@ -147,9 +149,14 @@ export function QuizStage({
             </button>
             <button
               onClick={onNext}
-              className="group flex items-center gap-2 rounded-xl bg-textPrimary px-7 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] active:scale-[0.98] shadow-md"
+              disabled={submitting}
+              className="group flex items-center gap-2 rounded-xl bg-textPrimary px-7 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] active:scale-[0.98] shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
             >
-              {currentStep === steps.length - 1 ? "Get My Results" : "Next"}
+              {currentStep === steps.length - 1
+                ? submitting
+                  ? "Analyzing..."
+                  : "Get My Results"
+                : "Next"}
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
           </div>

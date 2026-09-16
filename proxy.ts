@@ -6,7 +6,15 @@ const { auth } = NextAuth(authConfig);
 
 const ADMIN_ONLY = ["/admin"];
 const ENTREPRENEUR_ONLY = ["/entrepreneur"];
-const AUTH_REQUIRED = ["/dashboard", "/checkout", ...ADMIN_ONLY, ...ENTREPRENEUR_ONLY];
+
+const AUTH_REQUIRED = [
+  "/dashboard",
+  "/checkout",
+  "/analysis/skin",
+  "/analysis/hair",
+  ...ADMIN_ONLY,
+  ...ENTREPRENEUR_ONLY,
+];
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
@@ -35,5 +43,12 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/entrepreneur/:path*", "/admin/:path*", "/checkout/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/entrepreneur/:path*",
+    "/admin/:path*",
+    "/checkout/:path*",
+    "/analysis/skin/:path*",
+    "/analysis/hair/:path*",
+  ],
 };

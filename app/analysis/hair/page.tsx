@@ -7,6 +7,7 @@ import { ResultsStage } from "@/components/analysis/results-stage";
 import { hairSteps, initialHairData } from "@/data/hair-questions";
 import { apiCall } from "@/lib/api";
 import { endpoints } from "@/constants/urls";
+import { mapAnalysisResult } from "@/lib/analysis-mapper";
 import type { QuizFormData, AnalysisResult, AnalysisStage } from "@/types/analysis";
 
 function getHairLabel(steps: typeof hairSteps, data: QuizFormData, field: string) {
@@ -35,34 +36,6 @@ function formatHairPayload(data: QuizFormData) {
   };
 }
 
-const HAIR_FALLBACK: AnalysisResult = {
-  primaryType: "Wavy & Dry Hair",
-  secondaryType: "Color-Treated",
-  concerns: ["Dryness", "Frizz", "Breakage"],
-  recommendations: {
-    routine: [
-      "Co-wash 2x per week",
-      "Deep condition weekly",
-      "Apply leave-in on damp hair",
-      "Use wide-tooth comb only",
-      "Protect with satin pillowcase",
-    ],
-    ingredients: ["Argan Oil", "Keratin", "Shea Butter", "Biotin", "Panthenol"],
-    avoidIngredients: ["Sulfates", "Silicones", "Mineral Oil", "Alcohol"],
-    lifestyleConsiderations: [
-      "Trim ends every 8 weeks",
-      "Limit heat to 2x/week",
-      "Eat biotin-rich foods",
-      "Cold water rinse for shine",
-    ],
-    products: [
-      { name: "SheaMoisture Curl Enhancing Smoothie", category: "Styling", why: "Defines curls, reduces frizz" },
-      { name: "Briogeo Don't Despair, Repair! Mask", category: "Treatment", why: "Repairs heat damage" },
-      { name: "Mielle Organics Rosemary Mint Oil", category: "Scalp", why: "Stimulates growth" },
-    ],
-  },
-};
-
 export default function HairAnalysisPage() {
   const router = useRouter();
   const [stage, setStage] = useState<AnalysisStage>("quiz");
@@ -70,6 +43,7 @@ export default function HairAnalysisPage() {
   const [formData, setFormData] = useState<QuizFormData>(initialHairData);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSelect = (field: string, value: string) =>
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -111,6 +85,9 @@ export default function HairAnalysisPage() {
   };
 
   const handleSubmit = async () => {
+    setSubmitting(true);
+    setError(null);
+
     const payload = formatHairPayload(formData);
     const response = await apiCall<{
       primary_type: string;
@@ -125,23 +102,19 @@ export default function HairAnalysisPage() {
       };
     }>("POST", endpoints.HAIR_ANALYSIS, { data: payload });
 
-    if (response.success && response.data) {
-      const d = response.data;
-      setResult({
-        primaryType: d.primary_type,
-        secondaryType: d.secondary_characteristics?.join(", ") ?? "",
-        concerns: d.main_concerns ? d.main_concerns.split(", ") : [],
-        recommendations: {
-          routine: d.recommendations?.routine ?? [],
-          ingredients: d.recommendations?.ingredients ?? [],
-          avoidIngredients: d.recommendations?.avoid_ingredients ?? [],
-          lifestyleConsiderations: d.recommendations?.lifestyle ?? [],
-          products: d.recommendations?.products ?? [],
-        },
-      });
-    } else {
-      setResult(HAIR_FALLBACK);
+    setSubmitting(false);
+
+    if (response.status === 401) {
+      router.push("/login?callbackUrl=/analysis/hair");
+      return;
     }
+
+    if (!response.success || !response.data) {
+      setError(response.message ?? "Something went wrong. Please try again.");
+      return;
+    }
+
+    setResult(mapAnalysisResult(response.data));
     setStage("results");
   };
 
@@ -164,6 +137,7 @@ export default function HairAnalysisPage() {
       formData={formData}
       error={error}
       type="hair"
+      submitting={submitting}
       onSelect={handleSelect}
       onMultiSelect={handleMultiSelect}
       onNext={handleNext}

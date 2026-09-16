@@ -4,11 +4,12 @@ import Link from "next/link";
 import { Instagram, Facebook, Linkedin, Youtube } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/shared/logo";
+import { isAuthPage } from "@/lib/auth-routes";
 
 export function Footer() {
   const pathname = usePathname();
-  
-  if (pathname?.startsWith("/login") || pathname?.startsWith("/register")) {
+
+  if (isAuthPage(pathname)) {
     return null;
   }
 

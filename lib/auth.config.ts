@@ -2,8 +2,14 @@ import type { NextAuthConfig } from "next-auth";
 
 const VALID_AUDIENCES = ["WOMEN", "MEN", "UNISEX"];
 
+const THIRTY_DAYS = 30 * 24 * 60 * 60;
+
 export const authConfig: NextAuthConfig = {
-  session: { strategy: "jwt" },
+  // 30 days is the persistent ("remember me") duration. When a user leaves
+  // "remember me" unchecked, /api/auth/persist-session downgrades this same
+  // cookie to a browser-session cookie right after sign-in — see
+  // components/forms/login-form.tsx.
+  session: { strategy: "jwt", maxAge: THIRTY_DAYS },
   pages: {
     signIn: "/login",
   },

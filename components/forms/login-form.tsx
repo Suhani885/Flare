@@ -36,6 +36,14 @@ export function LoginForm() {
       return;
     }
 
+    if (!values.remember) {
+      await fetch("/api/auth/persist-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ remember: false }),
+      });
+    }
+
     toast.success("Welcome back!");
     router.push(searchParams.get("callbackUrl") ?? "/dashboard");
     router.refresh();

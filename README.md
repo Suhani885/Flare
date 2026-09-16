@@ -3,15 +3,16 @@
 ### *Your Glow. Your Way.*
 
 AI-powered skin & hair analysis, a DIY beauty marketplace, and a community
-forum — built as a full-stack Next.js app.
-
+forum — built as a full-stack Next.js app for **everyone**, not just one
+gender. 
 
 ## What this is
 
 - 🔬 **AI Skin & Hair Analysis** — a short quiz, answered by anyone, turned
   into a structured routine (skin/hair type, concerns, ingredients to
-  seek/avoid, budget-aware product ideas) by an LLM. Free tier gets the
-  basics; Premium gets a deeper, more specific report.
+  seek/avoid, budget-aware product ideas) by an LLM. Free tier gets a
+  concise report; Premium gets a longer, more specific one from a larger
+  model.
 - 🛍️ **Marketplace** — handmade beauty products from women (and anyone)
   running a small business, plus, while the seller community is still small,
   a curated catalog of real third-party products that link out to where you
@@ -25,12 +26,12 @@ forum — built as a full-stack Next.js app.
 - 🎨 **Adaptive theming** — the entire color palette (buttons, accents, forms)
   follows an audience preference: a warm rose theme for "Women", a deep
   steel-blue theme for "Men", and a copper-neutral default for everyone else.
-  The palette icon in the navbar works for **everyone, logged in or not** —
-  signed-in users get it saved to their account (and it's the only way
-  Google sign-ups set a preference at all, since Google skips the register
-  form's picker); logged-out visitors get it remembered in a cookie on this
-  browser.
+  The palette icon in the navbar works for **everyone, logged in or not**.
 
+Landing page, marketplace browsing, and community reading are open to
+everyone without an account — like any normal e-commerce site. Creating an
+account is only required to run the AI analysis, buy something, post, or
+sell.
 
 ## Feature status
 
@@ -40,11 +41,12 @@ forum — built as a full-stack Next.js app.
 | Database schema (Prisma + Neon Postgres) | ✅ |
 | Auth: email/password (bcrypt, rate-limited, timing-safe) | ✅ |
 | Auth: Google OAuth | ✅ |
+| Auth: forgot/reset password, remember me | ✅ |
 | Role-based route protection (user / entrepreneur / admin) | ✅ |
-| Adaptive gender-based theming | ✅ |
+| Adaptive gender-based theming (works logged out too) | ✅ |
 | Scroll-reveal motion, full responsive layout (375–1440px+) | ✅ |
-| AI skin & hair analysis (Groq) | 🚧 |
-| User dashboard (history, saved products) | 🚧 (placeholder page live) |
+| AI skin & hair analysis (Groq, free vs premium depth) | ✅ |
+| User dashboard (analysis history) | ✅ (saved products still pending) |
 | Entrepreneur panel (list/manage products) | 🚧 (placeholder page live) |
 | Cloudinary image uploads | 🚧 |
 | External-catalog products (bootstrap marketplace) | 🚧 (schema ready) |
@@ -63,9 +65,9 @@ forum — built as a full-stack Next.js app.
 | Database | PostgreSQL on [Neon](https://neon.tech) (serverless) |
 | ORM | Prisma 7 (`prisma-client` generator + `@prisma/adapter-neon`) |
 | Auth | Auth.js / NextAuth v5 — Credentials + Google, JWT sessions |
-| AI | [Groq](https://groq.com) (Llama models) for structured analysis |
-| Images | Cloudinary |
-| Payments | Razorpay (test mode) |
+| AI | [Groq](https://groq.com) — `openai/gpt-oss-20b` (free tier) / `openai/gpt-oss-120b` (premium) |
+| Images | Cloudinary (planned) |
+| Payments | Razorpay test mode (planned) |
 | State | Zustand (client), React Server Components (server) |
 | Validation | Zod |
 
@@ -88,8 +90,7 @@ After `npm run db:seed`, these accounts exist (password for all: `password123`):
 
 | Email | Role |
 |---|---|
-| `admin@flare.app` | ADMIN |
+| `admin@flare.app` | ADMIN (Premium) |
 | `seller@flare.app` | ENTREPRENEUR |
-| `user@flare.app` | USER |
-
+| `user@flare.app` | USER (Free) |
 
