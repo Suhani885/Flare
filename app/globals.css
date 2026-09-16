@@ -3,16 +3,18 @@
 @variant dark (&:is(.never-dark *));
 
 @theme {
-  --color-primary-50: #fef5f8;
-  --color-primary-100: #fde8f1;
-  --color-primary-200: #fcd1e4;
-  --color-primary-300: #f9aaca;
-  --color-primary-400: #f578aa;
-  --color-primary-500: #ed4e8c;
-  --color-primary-600: #db2d6e;
-  --color-primary-700: #bd1d56;
-  --color-primary-800: #9d1a47;
-  --color-primary-900: #84193e;
+  /* Default ("neutral") brand scale — warm copper/terracotta glow.
+     Used for logged-out visitors and accounts with no audience preference. */
+  --color-primary-50: #fdf6f0;
+  --color-primary-100: #fbeadd;
+  --color-primary-200: #f5d0b0;
+  --color-primary-300: #ebad78;
+  --color-primary-400: #dd8748;
+  --color-primary-500: #c86a2e;
+  --color-primary-600: #a8511f;
+  --color-primary-700: #863f1b;
+  --color-primary-800: #6d341c;
+  --color-primary-900: #5c2c1b;
 
   --color-secondary-50: #f4f9f4;
   --color-secondary-100: #e6f3e6;
@@ -62,6 +64,34 @@
   --color-textMuted: #a8a29e;
 }
 
+/* "feminine" theme — audiencePreference = WOMEN */
+html[data-theme="feminine"] {
+  --color-primary-50: #fef5f8;
+  --color-primary-100: #fde8f1;
+  --color-primary-200: #fcd1e4;
+  --color-primary-300: #f9aaca;
+  --color-primary-400: #f578aa;
+  --color-primary-500: #ed4e8c;
+  --color-primary-600: #db2d6e;
+  --color-primary-700: #bd1d56;
+  --color-primary-800: #9d1a47;
+  --color-primary-900: #84193e;
+}
+
+/* "masculine" theme — audiencePreference = MEN. Deep steel/navy blue. */
+html[data-theme="masculine"] {
+  --color-primary-50: #f0f5fa;
+  --color-primary-100: #dce8f2;
+  --color-primary-200: #b3d0e3;
+  --color-primary-300: #7fadcc;
+  --color-primary-400: #4f87b0;
+  --color-primary-500: #326894;
+  --color-primary-600: #26527a;
+  --color-primary-700: #204363;
+  --color-primary-800: #1e3752;
+  --color-primary-900: #1c2e44;
+}
+
 @layer base {
   body {
     @apply bg-background text-textPrimary antialiased;
@@ -74,15 +104,43 @@
   }
 }
 
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media print {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 .ant-btn-primary {
-  background-color: #db2d6e !important;
+  background-color: var(--color-primary-600) !important;
   color: #ffffff !important;
-  border-color: #db2d6e !important;
+  border-color: var(--color-primary-600) !important;
 }
 
 .ant-btn-primary:hover {
-  background-color: #ed4e8c !important;
-  border-color: #ed4e8c !important;
+  background-color: var(--color-primary-500) !important;
+  border-color: var(--color-primary-500) !important;
   color: #ffffff !important;
 }
 

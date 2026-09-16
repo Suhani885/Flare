@@ -1,13 +1,28 @@
 "use client";
 
 import { ConfigProvider } from "antd";
+import type { SiteTheme } from "@/lib/theme";
 
-export function AntdProvider({ children }: { children: React.ReactNode }) {
+const THEME_PRIMARY: Record<SiteTheme, { base: string; hover: string }> = {
+  neutral: { base: "#a8511f", hover: "#c86a2e" },
+  feminine: { base: "#db2d6e", hover: "#ed4e8c" },
+  masculine: { base: "#26527a", hover: "#326894" },
+};
+
+export function AntdProvider({
+  children,
+  theme = "neutral",
+}: {
+  children: React.ReactNode;
+  theme?: SiteTheme;
+}) {
+  const colors = THEME_PRIMARY[theme];
+
   return (
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "#db2d6e",
+          colorPrimary: colors.base,
           colorSuccess: "#4c9d4c",
           colorWarning: "#d97706",
           colorError: "#db2d6e",
@@ -23,7 +38,7 @@ export function AntdProvider({ children }: { children: React.ReactNode }) {
           Button: {
             controlHeight: 40,
             borderRadius: 8,
-            primaryColor: "#db2d6e",
+            primaryColor: colors.base,
           },
           Input: {
             controlHeight: 40,

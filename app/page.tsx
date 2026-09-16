@@ -2,7 +2,6 @@ import { HeroSection } from "@/components/shared/hero-section";
 import { CollectionsSection } from "@/components/shared/collections-section";
 import { ExperienceSection } from "@/components/shared/experience-section";
 import { CommunitySection } from "@/components/shared/community-section";
-import { NewsletterSection } from "@/components/shared/newsletter-section";
 
 export default function Home() {
   return (
@@ -11,7 +10,6 @@ export default function Home() {
       <CollectionsSection />
       <ExperienceSection />
       <CommunitySection />
-      <NewsletterSection />
     </div>
   );
 }

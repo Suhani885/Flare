@@ -16,16 +16,25 @@ interface RegisterFormValues {
   confirmPassword: string;
 }
 
+type AudienceOption = "WOMEN" | "MEN" | undefined;
+
+const audienceOptions: { value: AudienceOption; label: string }[] = [
+  { value: "WOMEN", label: "Women" },
+  { value: "MEN", label: "Men" },
+  { value: undefined, label: "Prefer not to say" },
+];
+
 export function RegisterForm() {
   const [form] = Form.useForm<RegisterFormValues>();
   const [submitting, setSubmitting] = useState(false);
+  const [audiencePreference, setAudiencePreference] = useState<AudienceOption>(undefined);
   const router = useRouter();
 
   const onFinish = async (values: RegisterFormValues) => {
     setSubmitting(true);
 
     const response = await apiCall("POST", endpoints.REGISTER, {
-      data: values,
+      data: { ...values, audiencePreference },
       headers: { loader: false },
     });
 
@@ -85,6 +94,34 @@ export function RegisterForm() {
           className="group h-12 rounded-xl border border-border bg-surface px-4 shadow-sm transition-all hover:bg-surfaceElevated focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20"
         />
       </Form.Item>
+
+      <div className="mb-6">
+        <label className="mb-2 block text-sm font-medium text-textPrimary">
+          Personalize your experience{" "}
+          <span className="font-normal text-textMuted">(optional)</span>
+        </label>
+        <div className="flex gap-2">
+          {audienceOptions.map((opt) => (
+            <button
+              key={opt.label}
+              type="button"
+              onClick={() => setAudiencePreference(opt.value)}
+              className={`flex-1 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all ${
+                audiencePreference === opt.value
+                  ? "border-primary-600 bg-primary-600 text-white"
+                  : "border-border bg-surface text-textSecondary hover:border-primary-300 hover:text-textPrimary"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-textMuted">
+          Personalizes your color theme and product suggestions — never shown
+          to other users. You can change this anytime from the theme icon in
+          the navbar.
+        </p>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Form.Item

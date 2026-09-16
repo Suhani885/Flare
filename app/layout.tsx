@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
+import { auth } from "@/lib/auth";
+import { resolveTheme, THEME_COOKIE_NAME } from "@/lib/theme";
 import { AntdProvider } from "@/components/providers/antd-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { Navbar } from "@/components/shared/navbar";
@@ -24,16 +27,27 @@ export const metadata: Metadata = {
     "AI-powered skin & hair analysis, a DIY beauty marketplace, and a community forum — for everyone.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  const cookieStore = await cookies();
+  const theme = resolveTheme(
+    session?.user?.audiencePreference,
+    cookieStore.get(THEME_COOKIE_NAME)?.value
+  );
+
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html
+      lang="en"
+      data-theme={theme}
+      className={`${inter.variable} ${playfair.variable}`}
+    >
       <body className="font-sans flex min-h-screen flex-col bg-background text-textPrimary antialiased transition-colors duration-300">
         <SessionProvider>
-          <AntdProvider>
+          <AntdProvider theme={theme}>
             <GlobalSkeletonLoader />
             <Navbar />
             <main className="flex-1">{children}</main>

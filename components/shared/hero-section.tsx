@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, Play } from "lucide-react";
+import { Reveal } from "@/components/shared/reveal";
 
 const audienceChips: { label: string; audience: string }[] = [
   { label: "For Her", audience: "WOMEN" },
@@ -12,32 +13,37 @@ const audienceChips: { label: string; audience: string }[] = [
 export function HeroSection() {
   return (
     <section
-      className="relative flex min-h-screen items-center pb-20 pt-32 overflow-hidden bg-[#FAFAFA]"
+      className="relative flex min-h-screen items-center overflow-hidden bg-[#FAFAFA] pb-16 pt-28 sm:pb-20 sm:pt-32"
       aria-labelledby="hero-title"
     >
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-primary-200/50 blur-[110px]" />
+        <div className="absolute -bottom-32 -left-24 h-[24rem] w-[24rem] rounded-full bg-secondary-200/40 blur-[110px]" />
+      </div>
+
       <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-24">
-        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-          <div className="z-10 flex w-full flex-col justify-center lg:w-[55%]">
-            <span className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-primary-600">
+        <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-center lg:gap-24">
+          <Reveal className="z-10 flex w-full flex-col justify-center text-center lg:w-[55%] lg:text-left">
+            <span className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-primary-600 sm:text-sm">
               Your Glow. Your Way.
             </span>
             <h1
               id="hero-title"
-              className="mb-8 font-serif text-5xl font-light leading-[1.05] tracking-tight text-textPrimary md:text-6xl lg:text-[5.5rem]"
+              className="mb-6 font-serif text-4xl font-light leading-[1.08] tracking-tight text-textPrimary sm:mb-8 sm:text-5xl md:text-6xl lg:text-[5.5rem]"
             >
               <span className="block">Bespoke Beauty,</span>
-              <span className="relative mt-2 block italic text-primary-700">
+              <span className="relative mt-1 block italic text-primary-700 sm:mt-2">
                 Crafted by AI.
               </span>
             </h1>
 
-            <p className="mb-10 max-w-xl text-lg font-light leading-relaxed text-textSecondary md:text-xl">
+            <p className="mx-auto mb-8 max-w-xl text-base font-light leading-relaxed text-textSecondary sm:mb-10 sm:text-lg md:text-xl lg:mx-0">
               Decode your skin &amp; hair&apos;s true needs. Our AI analysis
               creates hyper-personalized routines for every identity, tailored
               to your exact profile &mdash; not just one kind of beauty.
             </p>
 
-            <div className="mb-10 flex flex-wrap items-center gap-3">
+            <div className="mb-8 flex flex-wrap items-center justify-center gap-3 sm:mb-10 lg:justify-start">
               {audienceChips.map((chip) => (
                 <Link
                   key={chip.audience}
@@ -49,29 +55,29 @@ export function HeroSection() {
               ))}
             </div>
 
-            <div className="flex flex-col gap-5 sm:flex-row items-center">
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-5 lg:items-center lg:justify-start">
               <Link
                 href="/analysis"
-                className="group relative flex h-16 items-center justify-center overflow-hidden rounded-full bg-textPrimary px-10 font-medium text-white transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
+                className="group relative flex h-14 w-full items-center justify-center overflow-hidden rounded-full bg-textPrimary px-10 font-medium text-white transition-all hover:scale-[1.02] active:scale-[0.98] sm:h-16 sm:w-auto"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] transition-transform duration-700 group-hover:translate-x-[100%]" />
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                 <span className="relative z-10 text-base">Begin Analysis</span>
                 <ArrowRight className="relative z-10 ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
 
               <Link
                 href="/how-it-works"
-                className="group flex h-16 items-center justify-center gap-3 rounded-full px-8 font-medium text-textPrimary transition-all hover:bg-black/5 w-full sm:w-auto"
+                className="group flex h-14 w-full items-center justify-center gap-3 rounded-full px-8 font-medium text-textPrimary transition-all hover:bg-black/5 sm:h-16 sm:w-auto"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-textPrimary text-textPrimary transition-transform group-hover:scale-110">
-                  <Play className="h-4 w-4 ml-1" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-textPrimary text-textPrimary transition-transform group-hover:scale-110">
+                  <Play className="ml-1 h-4 w-4" />
                 </div>
                 <span>How it works</span>
               </Link>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="relative w-full lg:w-[45%]">
+          <Reveal delay={150} className="relative w-full max-w-md lg:w-[45%] lg:max-w-none">
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2.5rem] bg-black/5 shadow-2xl ring-1 ring-black/5">
               <img
                 src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&auto=format&fit=crop"
@@ -79,12 +85,12 @@ export function HeroSection() {
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
               />
 
-              <div className="absolute bottom-8 left-8 right-8 rounded-2xl border border-white/20 bg-white/20 p-6 backdrop-blur-xl shadow-2xl">
+              <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/20 bg-white/20 p-4 backdrop-blur-xl shadow-2xl sm:inset-x-8 sm:bottom-8 sm:p-6">
                 <div className="flex items-center gap-4">
-                  <div className="flex flex-col gap-1 w-full">
-                    <div className="flex justify-between items-center text-white">
+                  <div className="flex w-full flex-col gap-1">
+                    <div className="flex items-center justify-between text-white">
                       <span className="font-medium">Beauty Score</span>
-                      <span className="font-serif italic font-light text-xl">
+                      <span className="font-serif text-xl font-light italic">
                         96%
                       </span>
                     </div>
@@ -95,7 +101,7 @@ export function HeroSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

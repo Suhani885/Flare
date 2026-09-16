@@ -3,13 +3,8 @@
 ### *Your Glow. Your Way.*
 
 AI-powered skin & hair analysis, a DIY beauty marketplace, and a community
-forum — built as a full-stack Next.js app for **everyone**, not just one
-gender. This README is a living document and is updated at the end of every
-build phase.
+forum — built as a full-stack Next.js app.
 
-> **Status:** actively being built out phase by phase. Sections below marked
-> ✅ are implemented and working end-to-end against a real database; 🚧 are
-> designed but not yet built.
 
 ## What this is
 
@@ -27,11 +22,15 @@ build phase.
   with their own panel and permissions.
 - 🌱 **Sustainability-aware** — products can carry a sustainability score and
   a "sponsored eco-brand" flag.
+- 🎨 **Adaptive theming** — the entire color palette (buttons, accents, forms)
+  follows an audience preference: a warm rose theme for "Women", a deep
+  steel-blue theme for "Men", and a copper-neutral default for everyone else.
+  The palette icon in the navbar works for **everyone, logged in or not** —
+  signed-in users get it saved to their account (and it's the only way
+  Google sign-ups set a preference at all, since Google skips the register
+  form's picker); logged-out visitors get it remembered in a cookie on this
+  browser.
 
-Landing page, marketplace browsing, and community reading are open to
-everyone without an account — like any normal e-commerce site. Creating an
-account is only required to run the AI analysis, buy something, post, or
-sell.
 
 ## Feature status
 
@@ -42,6 +41,8 @@ sell.
 | Auth: email/password (bcrypt, rate-limited, timing-safe) | ✅ |
 | Auth: Google OAuth | ✅ |
 | Role-based route protection (user / entrepreneur / admin) | ✅ |
+| Adaptive gender-based theming | ✅ |
+| Scroll-reveal motion, full responsive layout (375–1440px+) | ✅ |
 | AI skin & hair analysis (Groq) | 🚧 |
 | User dashboard (history, saved products) | 🚧 (placeholder page live) |
 | Entrepreneur panel (list/manage products) | 🚧 (placeholder page live) |
@@ -68,38 +69,6 @@ sell.
 | State | Zustand (client), React Server Components (server) |
 | Validation | Zod |
 
-## Security posture
-
-Built with the explicit goal of having no obvious holes. What's actually in
-place today:
-
-- Passwords hashed with **bcrypt** (cost factor 12), never stored or logged
-  in plaintext.
-- Login is **rate-limited** per email+IP (5 attempts / 15 min) and short-
-  circuits before touching the database once limited.
-- **Timing-safe** credential checks — a login attempt for a non-existent
-  email takes the same time as a wrong password, so response timing can't be
-  used to enumerate registered emails.
-- Sessions are **JWT-based, `httpOnly`, `SameSite=Lax`** cookies (no tokens
-  readable from client JS).
-- **Google OAuth** does not auto-link to an existing email/password account
-  (`allowDangerousEmailAccountLinking: false`) — prevents account takeover
-  via a same-address OAuth sign-in.
-- Registration is rate-limited per IP and never reveals timing differences
-  between "email taken" and "validation failed" paths in a way that's
-  exploitable at scale.
-- Route access is enforced **server-side** in `proxy.ts` (Next's middleware
-  successor) by role, not just hidden in the UI.
-- Security headers on every response: `X-Frame-Options`, `X-Content-Type-
-  Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-
-  Security`.
-- All request bodies validated with **Zod** before touching the database.
-
-Honest caveat: the current rate limiter is in-memory (per server instance),
-which is fine for a single-region small-scale deployment but won't hold up
-across many serverless instances at real scale — see `DEPLOYMENT.md` (once
-written) for the Upstash Redis upgrade path. No system is "unhackable"; this
-is a solid, standard baseline, not a guarantee.
 
 ## Getting started
 
@@ -113,19 +82,6 @@ npm run db:seed        # creates demo accounts (see below)
 npm run dev
 ```
 
-### Environment variables
-
-See `.env.example` for the full list with setup links. You'll need:
-
-- A free [Neon](https://neon.tech) Postgres database (`DATABASE_URL` — use
-  the **direct**, non-pooled host; see the comment in `.env.example` for why)
-- A `NEXTAUTH_SECRET` (`openssl rand -base64 32`)
-- A free [Groq](https://console.groq.com/keys) API key
-- [Cloudinary](https://console.cloudinary.com) credentials
-- [Razorpay](https://dashboard.razorpay.com/app/keys) **test** keys
-- (Optional, for Google sign-in) OAuth credentials from the
-  [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
-
 ### Demo accounts
 
 After `npm run db:seed`, these accounts exist (password for all: `password123`):
@@ -136,35 +92,4 @@ After `npm run db:seed`, these accounts exist (password for all: `password123`):
 | `seller@flare.app` | ENTREPRENEUR |
 | `user@flare.app` | USER |
 
-## Project structure
 
-```
-app/                 # Next.js App Router pages & API routes
-  (auth)/login, register
-  admin/, entrepreneur/, dashboard/   # role-gated panels
-  api/                                # route handlers (auth, register, ...)
-  analysis/, marketplace/
-components/
-  forms/             # login/register (Ant Design + real signIn/register calls)
-  shared/             # navbar, footer, homepage sections
-  providers/          # session + antd providers
-lib/
-  auth.ts, auth.config.ts   # NextAuth (split so the edge proxy stays DB-free)
-  prisma.ts                  # Prisma client (Neon adapter, singleton)
-  rate-limit.ts               # in-memory limiter
-  validations/                # Zod schemas
-prisma/
-  schema.prisma, migrations/, seed.ts
-proxy.ts             # role-based route protection (Next 16's middleware successor)
-```
-
-## Roadmap
-
-Built in phases — AI analysis engine, Cloudinary + marketplace, Razorpay
-checkout, community forum, admin panel, blog, then a security/perf hardening
-pass and full deployment guide. This README's feature table above tracks
-current status.
-
----
-
-*Not just for women — for everyone's skin and hair.*

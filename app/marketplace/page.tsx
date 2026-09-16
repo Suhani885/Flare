@@ -41,7 +41,7 @@ const sampleProducts: SampleProduct[] = [
     audience: "UNISEX",
     sustainabilityScore: 88,
     image:
-      "https://images.unsplash.com/photo-1571781926291-c477eb31f859?w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&auto=format&fit=crop",
   },
 ];
 

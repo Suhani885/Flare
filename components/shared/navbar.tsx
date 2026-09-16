@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "@/components/shared/logo";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { useSession, signOut } from "next-auth/react";
 import {
   ChevronDown,
@@ -75,7 +76,7 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden items-center md:flex">
+            <div className="hidden items-center lg:flex">
               <div className="flex items-center gap-2 rounded-full border border-border/40 bg-surface/30 px-2 py-1.5 shadow-sm backdrop-blur-md">
                 {navLinks.map((link) => (
                   <Link
@@ -103,7 +104,7 @@ export function Navbar() {
               
               <Link
                 href="/favorites"
-                className="hidden h-10 w-10 items-center justify-center rounded-full bg-surface/50 text-textSecondary transition-all hover:bg-white hover:text-primary-600 hover:shadow-sm sm:flex"
+                className="hidden h-10 w-10 items-center justify-center rounded-full bg-surface/50 text-textSecondary transition-all hover:bg-white hover:text-primary-600 hover:shadow-sm lg:flex"
               >
                 <Heart className="h-5 w-5" />
               </Link>
@@ -120,8 +121,12 @@ export function Navbar() {
                 </div>
               </Link>
 
+              <div className="hidden lg:block">
+                <ThemeToggle />
+              </div>
+
               {status === "authenticated" ? (
-                <div className="ml-2 hidden items-center gap-2 sm:flex">
+                <div className="ml-2 hidden items-center gap-2 lg:flex">
                   <Link
                     href="/dashboard"
                     className="flex items-center gap-2 rounded-full bg-textPrimary px-6 py-2.5 text-sm font-medium text-white transition-all hover:scale-[1.02] hover:bg-black hover:shadow-xl"
@@ -140,7 +145,7 @@ export function Navbar() {
               ) : (
                 <Link
                   href="/login"
-                  className="ml-2 hidden items-center gap-2 rounded-full bg-textPrimary px-6 py-2.5 text-sm font-medium text-white transition-all hover:scale-[1.02] hover:bg-black hover:shadow-xl sm:flex"
+                  className="ml-2 hidden items-center gap-2 rounded-full bg-textPrimary px-6 py-2.5 text-sm font-medium text-white transition-all hover:scale-[1.02] hover:bg-black hover:shadow-xl lg:flex"
                 >
                   <User className="h-4 w-4" />
                   <span>Account</span>
@@ -148,7 +153,7 @@ export function Navbar() {
               )}
 
               <button
-                className="ml-2 flex h-10 w-10 items-center justify-center rounded-full bg-surface/50 text-textSecondary transition-all hover:bg-white md:hidden"
+                className="ml-2 flex h-10 w-10 items-center justify-center rounded-full bg-surface/50 text-textSecondary transition-all hover:bg-white lg:hidden"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -187,7 +192,7 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white pt-24 md:hidden">
+        <div className="fixed inset-0 z-40 bg-white pt-24 lg:hidden">
           <div className="container mx-auto px-6">
             <div className="flex flex-col space-y-6 text-2xl font-serif">
               {navLinks.map((link) => (
@@ -200,6 +205,9 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <div className="border-b border-border/30 pb-6">
+                <ThemeToggle variant="inline" onChange={() => setIsMenuOpen(false)} />
+              </div>
               {status === "authenticated" ? (
                 <div className="mt-6 flex flex-col gap-3">
                   <Link
