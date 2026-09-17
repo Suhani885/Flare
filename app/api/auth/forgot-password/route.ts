@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { forgotPasswordSchema } from "@/lib/validations/auth";
 import { generateResetToken, RESET_TOKEN_TTL_MS } from "@/lib/reset-token";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 const GENERIC_MESSAGE =
   "If an account exists for that email, we've sent a password reset link.";
@@ -42,10 +43,13 @@ export async function POST(request: Request) {
 
     const resetLink = `${process.env.NEXTAUTH_URL}/reset-password?token=${raw}&email=${encodeURIComponent(email)}`;
 
-    // No email provider is wired up yet — log it so it's usable locally.
-    console.log(`Password reset link for ${email}: ${resetLink}`);
+    const { sent } = await sendPasswordResetEmail(email, resetLink);
 
-    if (process.env.NODE_ENV !== "production") {
+    // Only fall back to exposing the link in the response when we couldn't
+    // actually send it (no provider configured, or the send failed) — and
+    // even then, never in production. Once a real provider is wired up and
+    // working, this branch never fires.
+    if (!sent && process.env.NODE_ENV !== "production") {
       return NextResponse.json({ message: GENERIC_MESSAGE, devResetLink: resetLink });
     }
   }

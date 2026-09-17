@@ -2,23 +2,16 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Palette, Check } from "lucide-react";
-import { THEME_COOKIE_NAME, isSiteTheme, type SiteTheme } from "@/lib/theme";
+import { THEME_COOKIE_NAME, type SiteTheme } from "@/lib/theme";
+import { useThemeContext } from "@/components/providers/theme-provider";
 
 const options: { label: string; audience: "WOMEN" | "MEN" | "UNISEX"; theme: SiteTheme }[] = [
   { label: "For Her", audience: "WOMEN", theme: "feminine" },
   { label: "For Him", audience: "MEN", theme: "masculine" },
   { label: "For Everyone", audience: "UNISEX", theme: "neutral" },
 ];
-
-function readThemeCookie(): SiteTheme | null {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(new RegExp(`(?:^|; )${THEME_COOKIE_NAME}=([^;]*)`));
-  const value = match ? decodeURIComponent(match[1]) : null;
-  return isSiteTheme(value) ? value : null;
-}
 
 function writeThemeCookie(theme: SiteTheme): void {
   document.cookie = `${THEME_COOKIE_NAME}=${theme}; path=/; max-age=31536000; samesite=lax`;
@@ -31,45 +24,37 @@ export function ThemeToggle({
   variant?: "dropdown" | "inline";
   onChange?: () => void;
 }) {
-  const { data: session, status, update } = useSession();
-  const router = useRouter();
+  const { status, update } = useSession();
+  const { theme, setTheme } = useThemeContext();
   const [open, setOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [cookieTheme, setCookieTheme] = useState<SiteTheme | null>(() => readThemeCookie());
 
   if (status === "loading") return null;
 
   const isAuthenticated = status === "authenticated";
-  const current = isAuthenticated
-    ? session?.user?.audiencePreference ?? null
-    : options.find((opt) => opt.theme === cookieTheme)?.audience ?? null;
+  const current = options.find((opt) => opt.theme === theme)?.audience ?? null;
 
-  const choose = async (option: (typeof options)[number]) => {
-    setSaving(true);
+  const choose = (option: (typeof options)[number]) => {
     setOpen(false);
     onChange?.();
 
+    // Instant, local, smoothly-animated (see globals.css) — never blocked
+    // on a network round-trip.
+    setTheme(option.theme);
+
     if (isAuthenticated) {
-      const response = await fetch("/api/user/theme", {
+      fetch("/api/user/theme", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ audiencePreference: option.audience }),
-      });
-
-      if (!response.ok) {
-        toast.error("Could not update your theme preference");
-        setSaving(false);
-        return;
-      }
-
-      await update({ audiencePreference: option.audience });
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error();
+          return update({ audiencePreference: option.audience });
+        })
+        .catch(() => toast.error("Could not save your theme preference"));
     } else {
       writeThemeCookie(option.theme);
-      setCookieTheme(option.theme);
     }
-
-    router.refresh();
-    setSaving(false);
   };
 
   if (variant === "inline") {
@@ -81,7 +66,6 @@ export function ThemeToggle({
             <button
               key={opt.label}
               type="button"
-              disabled={saving}
               onClick={() => choose(opt)}
               className={`flex-1 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all ${
                 current === opt.audience

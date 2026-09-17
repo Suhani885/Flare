@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { auth } from "@/lib/auth";
 import { resolveTheme, THEME_COOKIE_NAME } from "@/lib/theme";
-import { AntdProvider } from "@/components/providers/antd-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
@@ -47,13 +47,13 @@ export default async function RootLayout({
     >
       <body className="font-sans flex min-h-screen flex-col bg-background text-textPrimary antialiased transition-colors duration-300">
         <SessionProvider>
-          <AntdProvider theme={theme}>
+          <ThemeProvider initialTheme={theme}>
             <GlobalSkeletonLoader />
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
             <Toaster richColors position="top-center" />
-          </AntdProvider>
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>

@@ -92,6 +92,41 @@ html[data-theme="masculine"] {
   --color-primary-900: #1c2e44;
 }
 
+/* Registering each theme color as a typed <color> custom property lets the
+   browser animate it directly — every element referencing var(--color-
+   primary-*) cross-fades smoothly the instant data-theme changes, with a
+   single transition rule instead of touching every component. */
+@property --color-primary-50 { syntax: "<color>"; inherits: true; initial-value: #fdf6f0; }
+@property --color-primary-100 { syntax: "<color>"; inherits: true; initial-value: #fbeadd; }
+@property --color-primary-200 { syntax: "<color>"; inherits: true; initial-value: #f5d0b0; }
+@property --color-primary-300 { syntax: "<color>"; inherits: true; initial-value: #ebad78; }
+@property --color-primary-400 { syntax: "<color>"; inherits: true; initial-value: #dd8748; }
+@property --color-primary-500 { syntax: "<color>"; inherits: true; initial-value: #c86a2e; }
+@property --color-primary-600 { syntax: "<color>"; inherits: true; initial-value: #a8511f; }
+@property --color-primary-700 { syntax: "<color>"; inherits: true; initial-value: #863f1b; }
+@property --color-primary-800 { syntax: "<color>"; inherits: true; initial-value: #6d341c; }
+@property --color-primary-900 { syntax: "<color>"; inherits: true; initial-value: #5c2c1b; }
+
+html {
+  transition:
+    --color-primary-50 0.45s ease,
+    --color-primary-100 0.45s ease,
+    --color-primary-200 0.45s ease,
+    --color-primary-300 0.45s ease,
+    --color-primary-400 0.45s ease,
+    --color-primary-500 0.45s ease,
+    --color-primary-600 0.45s ease,
+    --color-primary-700 0.45s ease,
+    --color-primary-800 0.45s ease,
+    --color-primary-900 0.45s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition: none;
+  }
+}
+
 @layer base {
   body {
     @apply bg-background text-textPrimary antialiased;
@@ -101,6 +136,14 @@ html[data-theme="masculine"] {
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-playfair), serif;
+  }
+
+  /* Elements whose color/background/border is theme-driven should cross-fade
+     smoothly too, not just the raw custom property — this covers anything
+     using a hardcoded fallback or a non-custom-property paint (e.g. box-
+     shadow colors, SVG fill) that @property alone doesn't reach. */
+  button, a, svg, [class*="bg-primary"], [class*="text-primary"], [class*="border-primary"] {
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, fill 0.35s ease, box-shadow 0.35s ease;
   }
 }
 
