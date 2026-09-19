@@ -47,9 +47,10 @@ sell.
 | Scroll-reveal motion, full responsive layout (375–1440px+) | ✅ |
 | AI skin & hair analysis (Groq, free vs premium depth) | ✅ |
 | User dashboard (analysis history) | ✅ (saved products still pending) |
-| Entrepreneur panel (list/manage products) | 🚧 (placeholder page live) |
-| Cloudinary image uploads | 🚧 |
-| External-catalog products (bootstrap marketplace) | 🚧 (schema ready) |
+| Entrepreneur panel + product CRUD + admin approval | ✅ |
+| Marketplace (real DB, filters, product detail pages) | ✅ |
+| Cloudinary image uploads (needs real credentials to test) | ✅ |
+| External-catalog products (admin-only, links out) | ✅ |
 | Razorpay checkout (products + premium) | 🚧 |
 | Community forum | 🚧 |
 | Admin panel (approvals, moderation, bulk upload) | 🚧 (placeholder page live) |
