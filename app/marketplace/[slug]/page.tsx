@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/price-format";
 import { ProductGallery } from "@/components/marketplace/product-gallery";
+import { BuyButton } from "@/components/marketplace/buy-button";
 
 const AUDIENCE_LABEL: Record<string, string> = {
   WOMEN: "For Her",
@@ -101,13 +102,14 @@ export default async function ProductDetailPage({
             >
               Visit {product.sourceName ?? "Store"} <ExternalLink className="h-4 w-4" />
             </a>
+          ) : product.stock > 0 ? (
+            <BuyButton purpose="product" productId={product.id} label={`Buy Now — ${formatPrice(product.price)}`} />
           ) : (
             <button
               disabled
               className="inline-flex h-14 cursor-not-allowed items-center justify-center gap-2 rounded-full bg-textPrimary/40 px-10 font-medium text-white"
-              title="Checkout is coming soon"
             >
-              Checkout coming soon
+              Out of stock
             </button>
           )}
 

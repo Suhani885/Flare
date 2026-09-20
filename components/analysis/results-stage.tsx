@@ -188,9 +188,9 @@ export function ResultsStage({ result, type, onReset }: ResultsStageProps) {
                 <p className="text-sm text-textSecondary mb-4 leading-relaxed">
                   Get a full 30-day personalised routine calendar, deeper ingredient analysis, dermatologist notes, and early access to new product launches matched to your profile.
                 </p>
-                <button className="rounded-full bg-primary-600 px-7 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] shadow-md shadow-primary-500/30">
+                <Link href="/subscription" className="inline-block rounded-full bg-primary-600 px-7 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-700 hover:scale-[1.02] shadow-md shadow-primary-500/30">
                   Upgrade to Premium
-                </button>
+                </Link>
               </div>
             </div>
           </div>
